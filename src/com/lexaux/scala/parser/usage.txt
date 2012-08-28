@@ -1,0 +1,10 @@
+Welcome to the parser-lexer-calculator written as a sample application to try Scala out.
+Usage:
+    scala com.lexaux.scala.parser.Main [-?] <arguments>
+Where <arguments> is arithmetical expression. Sample expressions are: 2+3, sin(sqrt(12)), 3+(2+4)-15(sin(5))
+
+Keys detailed:
+    -?      print this message
+    -h      print usage message
+    -t      for future, provide tabulation of the function
+    -g      draw graphic of a function, for future.
