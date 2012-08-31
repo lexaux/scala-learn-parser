@@ -1,12 +1,17 @@
 package com.lexaux.scala.parser
 
-/**
- * Created with IntelliJ IDEA.
- * User: LEXAUX
- * Date: 8/28/12
- * Time: 11:14 PM
- * To change this template use File | Settings | File Templates.
- */
-class Token {
+abstract class Token {
 
 }
+
+case class Number(value: Double) extends Token
+
+case class Func(name: String) extends Token
+
+case class Sign(signType: Char) extends Token
+
+object LeftBracket extends Token
+
+object RightBracket extends Token
+
+object Unknown extends Token

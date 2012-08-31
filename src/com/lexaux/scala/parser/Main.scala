@@ -11,7 +11,8 @@ object Main extends App {
 
   def performCalculation(statement: String) {
     printf("Working with arguments: '%s'", statement)
-    var l = new Lexer
+    var l = new Lexer(statement)
+    println (l.tokenize().size)
   }
 
   override def main(args: Array[String]) {

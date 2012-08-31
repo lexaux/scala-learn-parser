@@ -14,13 +14,18 @@ class Lexer(s: String) {
   def isSpace(c: Char): Boolean = " \\t\\n\\f" contains c
 
   def getNextToken(): Token = {
-    while(isSpace(lexerSource.ch)) {
+
+    while (isSpace(lexerSource.ch)) {
       lexerSource.next()
     }
 
-    new Token()
+    lexerSource.next() match {
+      case ')' => RightBracket
+      case '(' => LeftBracket
+//      case Sign(@signType) => Sign(signType)
+      case _ => Unknown
+    }
   }
-
 
 
   def tokenize(): mutable.Stack[Token] = {
@@ -29,6 +34,7 @@ class Lexer(s: String) {
     while (hasNextToken()) {
       resultStack.push(getNextToken())
     }
+
     resultStack
   }
 }
