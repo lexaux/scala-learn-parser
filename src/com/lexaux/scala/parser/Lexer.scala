@@ -3,13 +3,13 @@ package com.lexaux.scala.parser
 import collection.mutable
 import io.Source
 
+class LexerException(val pos: Int, val message: String) extends Exception
+
 /**
  */
 class Lexer(s: String) {
 
-  var lexerSource = Source.fromString(s)
-
-  def hasNextToken(): Boolean = lexerSource.hasNext
+  var lexerSource: Source = Source.fromString(s)
 
   def isSpace(c: Char): Boolean = " \\t\\n\\f" contains c
 
@@ -19,22 +19,48 @@ class Lexer(s: String) {
       lexerSource.next()
     }
 
-    lexerSource.next() match {
-      case ')' => RightBracket
-      case '(' => LeftBracket
-//      case Sign(@signType) => Sign(signType)
-      case _ => Unknown
+    val DigitPattern = """([0123456789])""".r
+    val LetterPattern = """([a-zA-Z])""".r
+    val SignPattern = """\+-/\*""".r
+    val char = lexerSource.ch
+    char.toString match {
+      case ")" => {
+        lexerSource.next()
+        RightBracket
+      }
+
+      case "(" => {
+        lexerSource.next()
+        LeftBracket
+      }
+
+      case SignPattern(char) => {
+        lexerSource.next()
+        Sign(lexerSource.ch)
+      }
+
+      case DigitPattern(char) => {
+        Tokens.extractNumber(lexerSource)
+      }
+      case LetterPattern(char) => {
+        lexerSource.next()
+        Unknown
+      }
+      case _ => {
+        lexerSource.next()
+        Unknown
+      }
     }
   }
 
 
   def tokenize(): mutable.Stack[Token] = {
-    val resultStack = new mutable.Stack[Token]()
+    val tokenStack = new mutable.Stack[Token]
+    lexerSource.next()
+    do {
+      tokenStack.push(getNextToken())
+    } while (lexerSource.hasNext)
 
-    while (hasNextToken()) {
-      resultStack.push(getNextToken())
-    }
-
-    resultStack
+    tokenStack
   }
 }

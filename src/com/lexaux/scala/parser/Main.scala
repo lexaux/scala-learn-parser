@@ -10,9 +10,21 @@ object Main extends App {
   }
 
   def performCalculation(statement: String) {
-    printf("Working with arguments: '%s'", statement)
-    var l = new Lexer(statement)
-    println (l.tokenize().size)
+    printf("Working with arguments: '%s'\n", statement)
+
+    try {
+      val l = new Lexer(statement)
+      println("Starting lexer job.")
+      println(l.tokenize().size)
+    } catch {
+      case lx: LexerException => {
+        println
+        println("Lexer job failed! See details below")
+        println("    " + statement)
+        println("    " + (" " * (lx.pos - 1))) + "^^^"
+        println("Reported error: " + lx.message)
+      }
+    }
   }
 
   override def main(args: Array[String]) {
