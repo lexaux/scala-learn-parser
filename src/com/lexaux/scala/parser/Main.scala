@@ -1,6 +1,7 @@
 package com.lexaux.scala.parser
 
 import io.Source
+import collection.mutable
 
 object Main extends App {
 
@@ -9,19 +10,36 @@ object Main extends App {
     print(usageFile.mkString)
   }
 
+  def printLexerOutput(stack: mutable.Stack[Token]) {
+    println("this is the lexer output:")
+    for (token <- stack.reverse) {
+      println(token)
+    }
+  }
+
   def performCalculation(statement: String) {
     printf("Working with arguments: '%s'\n", statement)
 
     try {
       val l = new Lexer(statement)
       println("Starting lexer job.")
-      println(l.tokenize().size)
+      val tokenizedOutput = l.tokenize()
+      println(tokenizedOutput.size)
+      printLexerOutput(tokenizedOutput)
     } catch {
       case lx: LexerException => {
-        println
+        println()
         println("Lexer job failed! See details below")
+        println()
         println("    " + statement)
-        println("    " + (" " * (lx.pos - 1))) + "^^^"
+        val sb = new StringBuilder()
+        sb.append("    ")
+        for (x <- 0 to lx.pos -1 ) {
+          sb.append(" ")
+        }
+        sb.append("^")
+        println(sb.toString())
+        println(lx.pos)
         println("Reported error: " + lx.message)
       }
     }

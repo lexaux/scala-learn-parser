@@ -7,39 +7,26 @@ abstract class Token {
 
 }
 
-object Tokens {
-  def extractNumber(source: Source): Number = {
-
-    def isBoundaryChar(char: Char) = " ()+-*/".contains(char)
-
-    val sb = new StringBuilder(source.ch)
-    var dotAppeared = false
-    while (!isBoundaryChar(source.next())) {
-      if (!"1234567890.".contains(source.ch)) {
-        throw new LexerException(source.pos, "Wrong symbol in the number sequence")
-      }
-      if (source.ch == '.') {
-        if (dotAppeared)
-          throw new LexerException(source.pos, "Received dot two times. Only once allowed in number notation.")
-        else
-          dotAppeared = true
-      }
-      sb.append()
-    }
-    Number(sb.toDouble)
-  }
-}
-
 case class Number(value: Double) extends Token {
-
+  override def toString = "NUMBER(" + value + ")"
 }
 
-case class Symbol(name: String) extends Token
+case class Symbol(name: String) extends Token {
+  override def toString = "SYMBOL(" + name + ")"
+}
 
-case class Sign(signType: Char) extends Token
+case class Sign(signType: Char) extends Token {
+  override def toString = "SIGN(" + signType + ")"
+}
 
-object LeftBracket extends Token
+object LeftBracket extends Token {
+  override def toString = "LBRACKET"
+}
 
-object RightBracket extends Token
+object RightBracket extends Token {
+  override def toString = "RBRACKET"
+}
 
-object Unknown extends Token
+object Unknown extends Token {
+  override def toString = "UNKNOWN!"
+}
