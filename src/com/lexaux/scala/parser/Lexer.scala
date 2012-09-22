@@ -70,7 +70,7 @@ class Lexer(inputString: String) {
 
   def tokenize(): mutable.Stack[Token] = {
     val tokenStack = new mutable.Stack[Token]
-    if (!hasNext) {
+    if (inputString.length == 0) {
       throw new LexerException(0, "Empty statement")
     }
 
