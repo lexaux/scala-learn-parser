@@ -64,7 +64,10 @@ class Lexer(inputString: String) {
       }
       sb.append(currentChar)
     }
-    // rewind back by one if this was boundary
+    // rewind back by one if this was boundary. We should stay on the last symbol of the number
+    if (isBoundaryChar(currentChar)) {
+      prevChar()
+    }
     Number(sb.toDouble)
   }
 
@@ -74,8 +77,12 @@ class Lexer(inputString: String) {
       throw new LexerException(0, "Empty statement")
     }
 
-    // the first thing.
-    do {
+    // initial position, it will be scrolled by one in the first cycle of the cycle below
+    inputStringPosition = -1
+
+    while (hasNext) {
+      nextChar()
+
       while (hasNext && isSpace(currentChar)) {
         nextChar()
       }
@@ -83,17 +90,14 @@ class Lexer(inputString: String) {
       currentChar.toString match {
         case ")" => {
           tokenStack.push(RightBracket)
-          nextChar()
         }
 
         case "(" => {
           tokenStack.push(LeftBracket)
-          nextChar()
         }
 
         case SignPattern(char) => {
           tokenStack.push(Sign(currentChar))
-          nextChar()
         }
 
         case DigitPattern(char) => {
@@ -108,7 +112,7 @@ class Lexer(inputString: String) {
           throw new LexerException(inputStringPosition, "Unknown symbol. Lexing failed.")
         }
       }
-    } while (hasNext)
-    tokenStack
+    }
+    tokenStack.reverse
   }
 }
