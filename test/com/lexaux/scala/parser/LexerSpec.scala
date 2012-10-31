@@ -1,9 +1,9 @@
 package com.lexaux.scala.parser
 
-import org.scalatest.FlatSpec
+import org.scalatest.{GivenWhenThen, FlatSpec}
 import org.scalatest.matchers.ShouldMatchers
 
-class LexerSpec extends FlatSpec with ShouldMatchers {
+class LexerSpec extends FlatSpec with ShouldMatchers with GivenWhenThen {
   "Lexer " should "throw an exception if supplied an empty string" in {
     val lexer = new Lexer("")
     evaluating {
@@ -53,6 +53,4 @@ class LexerSpec extends FlatSpec with ShouldMatchers {
       case _ => fail("nothing here")
     }
   }
-
-
 }
